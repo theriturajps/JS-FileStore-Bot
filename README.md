@@ -15,7 +15,7 @@
 - `PUBLIC_CHANNEL_MODE` = __on__ or __off__
 - `BOT_DOMAIN` = __https://***************.vercel.app__ (must include "https://")
 - `DB_CHANNEL` = __-100**********__
-- `BOT_TOKEN` = __*********:**************************__
+- `BOT_TOKEN` = __AA*******:ab**********************hj__
 - `BOT_USERNAME` = Enter bot username (eg. __riturajpsbot__)
 
 
