@@ -6,9 +6,6 @@ if (process.env.BOT_TOKEN === undefined) {
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-// Define your variables here
-const BOT_USERNAME = "riturajpsbot"
-
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const reportButton = Markup.button.url('Report Error', 'tg://user?id=0123456789');
@@ -131,7 +128,7 @@ bot.command('upmedia', async (ctx) => {
 
         const uploadedMessageId = message.message_id;
         
-        const link = `https://t.me/${BOT_USERNAME}?start=id_${uploadedMessageId}`;
+        const link = `https://t.me/riturajpsbot?start=id_${uploadedMessageId}`;
 
         ctx.reply(`✅ Your <pre>${title}</pre> is successfully stored and sent to the public channel 🙂.\n\n🔎 <b>Message ID:</b> <pre>${message.message_id}</pre>\n\n🛰️ Please use "<pre>/get ${message.message_id}</pre>" to retrieve.\n\n🔗 You can also use this link to retrieve the media:\n${link}`, { parse_mode: 'HTML' });
       } else {
