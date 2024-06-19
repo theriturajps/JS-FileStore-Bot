@@ -5,6 +5,6 @@
     },
     {
         "command": "/cmd2",
-        "message": "this is <pre>cmd2</pre>"
+        "message": "this is <code>cmd2</code>"
     }
 ]

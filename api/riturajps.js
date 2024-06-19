@@ -1,17 +1,23 @@
 const { Telegraf, Markup } = require('telegraf');
+const fs = require('fs');
+const commandDB = require('./commandDB.json'); // Import the JSON file
 
-if (process.env.BOT_TOKEN === undefined) {
-  throw new TypeError('BOT_TOKEN must be provided!');
-}
+// Define your variables here (Important)
+const BOT_TOKEN = '***********:*****************************';
+const DB_CHANNEL = '-100***********';
+const BOT_DOMAIN = 'https://***********.vercel.app';
+const PUBLIC_CHANNEL = '-100**********';
+const PUBLIC_CHANNEL_MODE = 'off';
+const COPY_MESSAGE = 'deactivate';
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Telegraf(BOT_TOKEN);
 
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
-const reportButton = Markup.button.url('Report Error', 'tg://user?id=0123456789');
-const copyrightButton = Markup.button.url('Copyright', 'https://t.me/riturajps');
+const reportButton = Markup.button.url('Report Error', 'tg://user?id=6350915754');
+const copyrightButton = Markup.button.url('Copyright', 'tg://user?id=6350915754');
 const deleteButton = Markup.button.callback('Delete', 'delete');
-const channelButton = Markup.button.url('File Retrieve Channel', 'https://t.me/iamriturajps');
+const riturajpsButton = Markup.button.url('Channel', 'https://t.me/iamriturajps');
 
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
@@ -19,7 +25,7 @@ const channelButton = Markup.button.url('File Retrieve Channel', 'https://t.me/i
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
 const keyboard = Markup.inlineKeyboard([
-  Markup.button.url('Report Error', 'tg://user?id=0123456789'),
+  Markup.button.url('Report Error', 'tg://user?id=6350915754'),
   Markup.button.callback('Delete', 'delete')
 ]);
 
@@ -31,7 +37,7 @@ bot.start(async (ctx) => {
     const input = startPayload.split('_');
     if (input.length === 2 && input[0] === 'id') {
       const messageId = input[1];
-      const dbChannelId = process.env.DB_CHANNEL;
+      const dbChannelId = DB_CHANNEL;
 
       try {
         const message = await ctx.telegram.copyMessage(ctx.from.id, dbChannelId, messageId, {
@@ -42,14 +48,14 @@ bot.start(async (ctx) => {
             ]
           }
         });
-        ctx.reply(`🎉 Requested For 🆔 : <pre>${messageId}</pre> 🙂`, { reply_to_message_id: message.message_id, parse_mode: 'HTML' });
+        ctx.reply(`🎉 Requested For 🆔 : <code>${messageId}</code> 🙂`, { reply_to_message_id: message.message_id, parse_mode: 'HTML' });
       } catch (error) {
         ctx.reply('Message not found or could not be retrieved 😐');
       }
     } else if (input.length === 3 && input[0] === 'id') {
       const startId = parseInt(input[1]);
       const endId = parseInt(input[2]);
-      const dbChannelId = process.env.DB_CHANNEL;
+      const dbChannelId = DB_CHANNEL;
       const messages = [];
 
       try {
@@ -65,7 +71,7 @@ bot.start(async (ctx) => {
           messages.push(message);
         }
 
-        ctx.reply(`🎉 Requested For 🆔 <pre>${startId}</pre> to <pre>${endId}</pre> 🙂`, { reply_to_message_id: messages[0].message_id, parse_mode: 'HTML' });
+        ctx.reply(`🎉 Requested For 🆔 <code>${startId}</code> to <code>${endId}</code> 🙂`, { reply_to_message_id: messages[0].message_id, parse_mode: 'HTML' });
       } catch (error) {
         ctx.reply('Messages not found or could not be retrieved 😐 or Please cheack it is the Valid 🆔');
       }
@@ -73,17 +79,19 @@ bot.start(async (ctx) => {
       ctx.reply('Invalid link format.');
     }
   } else {
-    ctx.reply('Welcome to the bot!\n\n📢 You can retrieve from single ID and as well as by batch ID with this bot.', {
+    ctx.reply('Welcome to the Ritu Raj Bot!\n\n📢 To get the media you must visit to the Offical Website (www.riturajps.in) Website and explore the posts, in the post you will get the url to get your media.\n\n🧿 Must Join Channel 😘', {
       reply_markup: {
-      inline_keyboard: [[channelButton], [deleteButton]]
-    }
+        inline_keyboard: [
+          [riturajpsButton]
+        ]
+      }
     });
   }
 });
 
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
-bot.help((ctx) => ctx.reply('📖 You can use :\n\n🧿 "<pre>/upmedia</pre>" : Reply to upload a video or document\n🧿 "<pre>/get</pre>" : To retrieve your media\n\n✅ Eg. <pre>/get Message ID</pre>\n\n🔰 NOTE: When you upload a video/document, you will get a Message ID', {parse_mode:'HTML'}));
+bot.help((ctx) => ctx.reply('<b>📖 You can use :</b>\n\n🧿 "<code>/upmedia</code>" : Reply to upload a video or document\n\n🧿 "<code>/get</code>" : To retrieve your media\n\n✅ Eg. <code>/get Message ID</code>\n\n🔰 NOTE: When you upload a video/document, you will get a Message ID', {parse_mode:'HTML'}));
 
 bot.action('delete', (ctx) => ctx.deleteMessage());
 
@@ -92,15 +100,15 @@ bot.command('photo', (ctx) => ctx.replyWithPhoto({ url: 'https://picsum.photos/2
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
 bot.command('upmedia', async (ctx) => {
-  if (process.env.COPY_MESSAGE === 'active') {
+  if (COPY_MESSAGE === 'active') {
     // Check if the user replied to a message
     if (!ctx.message.reply_to_message) {
       return ctx.reply('📖 Please reply to a message you want to upload.');
     }
 
-    const dbChannelId = process.env.DB_CHANNEL;
-    const publicChannelId = process.env.PUBLIC_CHANNEL;
-    const publicChannelMode = process.env.PUBLIC_CHANNEL_MODE;
+    const dbChannelId = DB_CHANNEL;
+    const publicChannelId = PUBLIC_CHANNEL;
+    const publicChannelMode = PUBLIC_CHANNEL_MODE;
 
     try {
       const repliedMessage = ctx.message.reply_to_message;
@@ -123,14 +131,14 @@ bot.command('upmedia', async (ctx) => {
         // Send the extracted title, message ID, and uploader information to the PUBLIC_CHANNEL if PUBLIC_CHANNEL_MODE is "on"
         if (publicChannelMode === 'on') {
           const uploaderLink = `tg://user?id=${uploaderUserId}`;
-          await ctx.telegram.sendMessage(publicChannelId, `<b>✅ Title:</b> <pre>${title}</pre>\n\n<b>🔎 Message ID:</b> <pre>${message.message_id}</pre>\n\n<b>⚠️ Uploaded By:</b> <a href="${uploaderLink}">#User</a>`, { parse_mode: 'HTML' });
+          await ctx.telegram.sendMessage(publicChannelId, `<b>✅ Title:</b> ${title}\n\n<b>🔎 ID:</b> <code>${message.message_id}</code>\n\n<b>⚠️ Uploaded By:</b> <a href="${uploaderLink}">#User</a>`, { parse_mode: 'HTML' });
         }
 
         const uploadedMessageId = message.message_id;
         
-        const link = `https://t.me/riturajpsbot?start=id_${uploadedMessageId}`;
+        const link = `https://t.me/TheGetBot?start=id_${uploadedMessageId}`;
 
-        ctx.reply(`✅ Your <pre>${title}</pre> is successfully stored and sent to the public channel 🙂.\n\n🔎 <b>Message ID:</b> <pre>${message.message_id}</pre>\n\n🛰️ Please use "<pre>/get ${message.message_id}</pre>" to retrieve.\n\n🔗 You can also use this link to retrieve the media:\n${link}`, { parse_mode: 'HTML' });
+        ctx.reply(`✅ <b>${title}</b> is successfully stored and info has been sent to the public channel 🙂.\n\n🔎 <b>Message ID:</b> <code>${message.message_id}</code>\n\n🛰️ Please use "<code>/get ${message.message_id}</code>" command to retrieve.\n\n🔗 You can also use this link to retrieve the media: ${link}`, { parse_mode: 'HTML' });
       } else {
         ctx.reply('The replied message is not a video or document. Please upload a video/document to store and send to the public channel.');
       }
@@ -145,18 +153,18 @@ bot.command('upmedia', async (ctx) => {
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
 bot.command('get', async (ctx) => {
-  if (process.env.COPY_MESSAGE === 'active') {
+  if (COPY_MESSAGE === 'active') {
     const input = ctx.message.text.split(' ');
     if (input.length !== 2) {
       return ctx.reply('🔎 Please use : /get Message ID.');
     }
 
     const messageId = input[1];
-    const dbChannelId = process.env.DB_CHANNEL;
+    const dbChannelId = DB_CHANNEL;
 
     try {
       const message = await ctx.telegram.copyMessage(ctx.from.id, dbChannelId, messageId, keyboard);
-      ctx.reply(`🎉 Requested For <pre>${messageId}</pre> ID 🙂`, {reply_to_message_id: message.message_id, parse_mode:'HTML'});
+      ctx.reply(`🎉 Requested For <code>${messageId}</code> ID 🙂`, {reply_to_message_id: message.message_id, parse_mode:'HTML'});
     } catch (error) {
       ctx.reply('Message not found or could not be retrieved 😐');
     }
@@ -212,6 +220,26 @@ bot.command('id', async (ctx) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------- //
 
+bot.on('text', async (ctx) => {
+  const messageText = ctx.message.text;
+
+  // Check if the message is a command
+  const matchingCommand = commandDB.find((command) => messageText === command.command);
+
+  if (matchingCommand) {
+      // Send the response with HTML and Markdown support
+      const sentMessage = await ctx.replyWithHTML(matchingCommand.message, {
+          reply_to_message_id: ctx.message.message_id,
+          reply_markup: {
+          inline_keyboard: [
+            [reportButton]
+          ]
+        }
+      });
+  }
+});
+
+// -------------------------------------------------------------------------------------------------------------------------------------------- //
 
 bot.command('report', (ctx) => {
   ctx.reply('Report in case of any error occurs in this bot.', {
@@ -234,7 +262,7 @@ bot.action('delete', (ctx) => ctx.deleteMessage());
 
 bot.launch({
   webhook: {
-    domain: process.env.BOT_DOMAIN,
+    domain: BOT_DOMAIN,
     hookPath: '/api/riturajps',
   },
 });
