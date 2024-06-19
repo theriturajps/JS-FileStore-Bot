@@ -1,0 +1,10 @@
+[
+    {
+        "command": "/cmd1",
+        "message": "this is **cmd1**"
+    },
+    {
+        "command": "/cmd2",
+        "message": "this is <pre>cmd2</pre>"
+    }
+]
