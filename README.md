@@ -1,5 +1,8 @@
 # JS-FileStore-Bot
 
+![GitHub repo size](https://img.shields.io/github/repo-size/theriturajps/JS-FileStore-Bot?style=plastic) ![GitHub language count](https://img.shields.io/github/languages/count/theriturajps/JS-FileStore-Bot?style=plastic) ![GitHub top language](https://img.shields.io/github/languages/top/theriturajps/JS-FileStore-Bot?style=plastic) ![GitHub last commit](https://img.shields.io/github/last-commit/theriturajps/JS-FileStore-Bot?color=red&style=plastic)
+
+
 ## Deployment
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/theriturajps/JS-FileStore-Bot)
